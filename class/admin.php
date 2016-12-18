@@ -5,15 +5,8 @@ Coded by flext0r © 2016
 
 */
 
-class Admin
+class Admin extends User
 {
-	private $db;
-	
-	public function __construct($DB_con)
-	{
-		$this->db = $DB_con;
-	
-	}
 	
 	public function getMain_Data($get)
 	{

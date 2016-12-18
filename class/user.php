@@ -7,7 +7,7 @@ Coded by flext0r © 2016
 
 class User
 {
-	private $db;
+	protected $db;
 	
 	public function __construct($DB_con)
 	{
