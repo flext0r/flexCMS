@@ -24,7 +24,7 @@ if(isset($_POST['Send']))
 
 <html>
 <head>
-
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="icon" href="./images/favicon.png" type="image/png" />
 	<title><?php echo $Admin->getMain_Data('title');?></title>
 	<link rel="stylesheet" type="text/css" href="./css/style.css" />
