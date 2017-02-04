@@ -5,6 +5,32 @@ Coded by flext0r © 2016
 
 */
 
+if(isset($_GET['articles'])) // needs to be written completely, just a test
+{
+	if(isset($_POST['SendA']))
+	{	
+		$title = $_POST['titleA'];
+		$content = $_POST['contentA'];
+		$Article->newArticle($title,$content);
+	}
+	
+$Content = '
+			<center>
+			<br><br>
+			<form method="POST" action="index.php?articles">
+			<br>
+			<input type="text" class="input2" name="titleA" placeholder="Title">
+			<br><br>
+			<textarea rows="7" cols="70" name="contentA">
+			
+			
+			</textarea>
+			<br><br>
+			<input type="submit" class="button" name = "SendA" value="Zapisz zmiany">
+			</form>
+			</center>';
+	
+}
 if(isset($_GET['logout'])) 
 {
 	session_destroy();

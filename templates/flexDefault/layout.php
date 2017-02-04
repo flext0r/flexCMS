@@ -1,13 +1,14 @@
 <?php
 /*
-Layout.php
+layout.php
 
-BROKEN KURWA DO NAPISANIA OD ZERA FJAJKFKJAFJAFKJFNAKURWALULKOKOSTOSMIECJFHAHFANFN
+Coded by flext0r © 2016
+
 
 */
-
-require 'main.php';
-require 'pages.php';
+require_once './includes/main.php';
+require_once './includes/pages.php';
+require_once './classes/ti.class.php';
 
 if(isset($_POST['Send']))
 {
@@ -27,7 +28,8 @@ if(isset($_POST['Send']))
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="icon" href="./images/favicon.png" type="image/png" />
-	<title><?php echo $Admin->getMain_Data('title');?></title>
+	<title>
+	<?php echo $Admin->getMain_Data('title');?> | <?php startblock('title') ?><?php endblock() ?></title>
 	<link rel="stylesheet" type="text/css" href="./css/style.css" />
 
 </head>
@@ -41,11 +43,11 @@ if(isset($_POST['Send']))
 			<?php
 			if(!$User->is_logged())
 			{
-				echo '<a href="index.php?register" class="button">Zarejestruj sie</a>';
+				echo '<a href="register.php" class="button">Zarejestruj sie</a>';
 			}
 			if($User->get_Data('user_level') > 0)
 			{
-				echo '<a href="index.php?admin" class="button">Panel Administracyjny</a>';
+				echo '<a href="admin.php" class="button">Panel Administracyjny</a>';
 			}
 			?>
 		</div>
@@ -59,7 +61,7 @@ if(isset($_POST['Send']))
 					<input type="submit" class="button" name = "Send" value="Zaloguj sie">
 					</form>';
 				}else{
-					echo '<a href="index.php?logout" class="button">Wyloguj sie</a>';
+					echo '<a href="logout.php" class="button">Wyloguj sie</a>';
 					echo '<a href="index.php?myprofile">'.$User->get_Data('user_login').'</a>';
 				}
 				echo $ShowUserInfo;
@@ -70,17 +72,15 @@ if(isset($_POST['Send']))
 
 
 <div class="content">
-	<div class="thead">Strona Glowna</div>
-		<?php echo $LeftPanel; ?>
-		<?php echo $Content; ?>
+	<div class="thead"><?php startblock('thead') ?><?php endblock() ?></div>
+		
+		<?php startblock('content') ?>
+		<?php endblock() ?>
+		
+		
 <div class="footer"><?php echo $Admin->getMain_Data('footer');?></div>
 
 </div>
 
 </body>
 </html>
-	
-
-
-	
-	

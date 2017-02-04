@@ -11,9 +11,10 @@ $MYSQL_PASSWORD = '';
 $MYSQL_USER = 'root';
 
 
-$Content = '';
-$LeftPanel = '';
-$ShowUserInfo = '';
+$Content = null;
+$LeftPanel = null;
+$ShowUserInfo = null;
+$date = date("Y-m-d H:i:s");
 
 
 /*
@@ -25,6 +26,20 @@ CREATE TABLE `users` (
   `user_email` varchar(255) COLLATE utf8_bin NOT NULL,
   `user_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+*/
+
+
+/*
+CREATE TABLE `articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+  `content` text NOT NULL,
+  `author` varchar(255) COLLATE utf8_bin NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 

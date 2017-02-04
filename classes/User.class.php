@@ -4,14 +4,13 @@
 Coded by flext0r © 2016
 
 */
-
 class User
 {
 	protected $db;
 	
-	public function __construct($DB_con)
+	public function __construct($connection)
 	{
-		$this->db = $DB_con;
+		$this->db = $connection;
 	
 	}
 	
@@ -77,13 +76,12 @@ class User
 				if(count($Error) == 0)
 				{
 					try{
-						$datee = date("Y-m-d H:i:s");
 						$password = $this->hashpass($password);
 						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date) VALUES (:login,:password,:email,:date)");
 						$SQL->bindParam(':login',$login,PDO::PARAM_STR);
 						$SQL->bindParam(':password',$password,PDO::PARAM_STR);
 						$SQL->bindParam(':email',$email,PDO::PARAM_STR);
-						$SQL->bindParam(':date',$date,PDO::PARAM_STR);
+						$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
 						$SQL->execute();
 						echo '<script>alert("Your account '.$login.' has been created!");</script>';
 						}catch(PDOEXCEPTION $e)
@@ -106,6 +104,15 @@ class User
 		return $Row[$get];
 		
 	}
+	public function get_DataID($data,$userid)// get_Data will be probably replaced
+	{
+		$SQL = $this->db->prepare("SELECT * FROM users WHERE user_id=:user_id");
+		$SQL->bindParam(':user_id',$userid);
+		$SQL->execute();
+		$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+		return $Row[$data];
+		
+	}
 	public function hashpass($str) {
 		return hash('sha256', $str);
 	}
@@ -114,6 +121,7 @@ class User
 	{
 		session_destroy();
 		$_SESSION['user_id'] = null;
+		header("Location: index.php");
 		
 	}
 	

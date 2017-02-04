@@ -8,11 +8,13 @@ Coded by flext0r © 2016
 
 require 'config.php';
 require 'db.php';
-require './class/user.php';
-require './class/admin.php';
+require './classes/User.class.php';
+require './classes/Admin.class.php';
+require './classes/Articles.class.php';
 
-$User = new User($DB_con);
-$Admin = new Admin($DB_con);
+$User = new User($connection);
+$Admin = new Admin($connection);
+$Article = new Articles($connection);
 
 
 

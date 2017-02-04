@@ -1,6 +1,5 @@
 body {
-	background: #FFFFFF url(../images/bg.jpg) fixed no-repeat center center;	
-	background-size:  cover;
+	background: #FFFFFF url(../images/bg2.jpg) repeat;	
 	margin: 0;
 	font: 100% arial,"Trebuchet MS",sans-serif;
 	color: #A9A9A9;
