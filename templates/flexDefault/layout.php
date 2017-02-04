@@ -62,7 +62,7 @@ if(isset($_POST['Send']))
 					</form>';
 				}else{
 					echo '<a href="logout.php" class="button">Wyloguj sie</a>';
-					echo '<a href="index.php?myprofile">'.$User->get_Data('user_login').'</a>';
+					echo '<a href="profile.php?global">'.$User->get_Data('user_login').'</a>';
 				}
 				echo $ShowUserInfo;
 			?>

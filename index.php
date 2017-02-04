@@ -1,15 +1,20 @@
 <?php
-//require_once 'includes/layout.php';
+
 require_once 'templates/flexDefault/layout.php';
+
+startblock('title');
+echo 'Strona Glowna';
+endblock();
+
+startblock('thead');
+echo 'Strona Glowna';
+endblock();
+
+
+startblock('content');
+echo '<center><h1>someth1ng</h1></center>';
+endblock();
+
 ?>
-
-<?php startblock('title') ?>
-Strona Glowna
-<?php endblock() ?>
-
-
-<?php startblock('content') ?>
-<center><h1>someth1ng</h1></center>
-<?php endblock() ?>
 
 	

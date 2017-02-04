@@ -14,8 +14,8 @@ startblock('thead');
 echo 'Rejestracja';
 endblock();
 
-$DisplayErrors = '';
-
+$DisplayErrors = null;
+startblock('content');
 if($User->is_logged())
 {
 	header("Location: index.php");
@@ -33,7 +33,6 @@ if($User->is_logged())
 			}
 	
 	}
-	startblock('content');
 	echo'
 		<center>
 		<b>'.$DisplayErrors.'</b>
@@ -51,11 +50,11 @@ if($User->is_logged())
 		<input type="submit" class="button" name = "SendR" value="Utworz konto">
 		</form>
 		</center>';
-		endblock();
+		
 		
 
 }
-
+endblock();
 
 
 

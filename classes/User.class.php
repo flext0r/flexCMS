@@ -60,9 +60,9 @@ class User
 			{
 				$Error[] = "Email is invalid!";
 			}
-				$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login AND user_email = :email LIMIT 1");
-				$SQL->bindParam('login',$login);
-				$SQL->bindParam('email',$email);
+				$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
+				$SQL->bindParam(':login',$login);
+				$SQL->bindParam(':email',$email);
 				$SQL->execute();
 				$Row = $SQL->fetch(PDO::FETCH_ASSOC);
 				if($Row['user_login'] == $login)
@@ -92,8 +92,61 @@ class User
 					return $Error;
 				}
 	}
-
-			
+	
+	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//still needs loads of work ffs
+	{
+		$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
+		$SQL->bindParam(':login',$username);
+		$SQL->bindParam(':email',$email);
+		$SQL->execute();
+		$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+		
+		$Error = [];
+		if(empty($username) OR empty($email))
+		{
+			$username = $this->get_Data('user_login');
+			$email = $this->get_Data('user_email');
+		}
+		if($username == $Row['user_login'])
+		{
+			$Error[] = "<b>".$username."</b> is already taken";
+		}
+		if($this->get_Data('user_password') != $this->hashpass($currentpassword))
+		{
+			$Error[] = 'Your password is wrong!';
+		}
+		if($newpassword != $confirmpassword)
+		{
+			$Error[] = 'Passwords dont match!';
+		}
+		if(filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
+		{
+			$Error[] = "Email is invalid!";
+		}
+		if($email == $Row['user_email'])
+		{
+			$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+		}
+		if(count($Error) == 0)
+		{
+			try {
+				
+				$newpassword = $this->hashpass($newpassword);
+				$SQL = $this->db->prepare("UPDATE users SET user_login = :username, user_password = :password, user_email = :email WHERE user_id = :id");
+				$SQL->bindParam(':username',$username);
+				$SQL->bindParam(':password',$newpassword);
+				$SQL->bindParam(':email',$newemail);
+				$SQL->bindParam(':id',$this->get_Data('user_id'));
+				$SQL->execute();
+				echo '<center>Your profile has been updated!</center>';
+			}catch(PDOEXCEPTION $e)
+			{
+				echo $e->getMessage();
+			}
+		}else{
+			return $Error;
+		}
+	}
 	
 	public function get_Data($get)
 	{
