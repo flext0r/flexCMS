@@ -52,9 +52,16 @@ class User
 				$Error[] = "Form can't be empty!";
 				
 			}
+			if(!check_username($login))
+			{
+				$Error[] = 'Username is invalid';
+			}
 			if($password != $password2)
 			{
 				$Error[] = "Passwords don't match!";
+			}elseif(!check_password($password))
+			{
+				$Error[] = 'Password is invalid';
 			}
 			if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
 			{
@@ -106,6 +113,10 @@ class User
 		{
 			$username = $this->get_Data('user_login');
 		}
+		if(!check_username($login))
+		{
+			$Error[] = 'Username is invalid';
+		}
 		if($username == $Row['user_login'])
 		{
 			$Error[] = "<b>".$username."</b> is already taken";
@@ -117,6 +128,9 @@ class User
 		if($newpassword != $confirmpassword)
 		{
 			$Error[] = 'Passwords dont match!';
+		}elseif(!check_password($newpassword))
+		{
+			$Error[] = 'Password is invalid';
 		}
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		{
@@ -126,6 +140,7 @@ class User
 		{
 			$Error[] = 'Email is already taken!';
 		}
+		
 		if(count($Error) == 0)
 		{
 			try {
