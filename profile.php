@@ -20,7 +20,7 @@ endblock();
 startblock('content');
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $DisplayErrors = null;
-
+/*
 
 if(is_numeric($id))
 {
@@ -43,7 +43,7 @@ if(is_numeric($id))
 		}
 	}else{
 		echo "<center>Podane ID nie jest liczba!</center>";
-}
+}*/
 if(!$User->is_logged())
 {
 	header("Location: index.php");
@@ -77,7 +77,7 @@ if(isset($_GET['editprofile']))
 		<center>
 		<b>'.$DisplayErrors.'</b>
 		<br><br>
-		<input type="text" class="input2" name="loginM" placeholder="Nazwa uzytkownika">
+		<input type="text" class="input2" name="loginM" placeholder="Nazwa uzytkownika" value='.$User->get_Data('user_login').'>
 		<br><br>
 		<input type="password" class="input2" name="passC" placeholder="Obecne Haslo">
 		<br><br>
@@ -85,7 +85,7 @@ if(isset($_GET['editprofile']))
 		<br><br>
 		<input type="password" class="input2" name="passM2" placeholder="Powtorz haslo">
 		<br><br>
-		<input type="text" class="input2" name="emailN" placeholder="Adres email">
+		<input type="text" class="input2" name="emailN" placeholder="Adres email" value='.$User->get_Data('user_email').'>
 		<br><br>
 		<input type="submit" class="button" name = "SendEdit" value="Zapisz zmiany">
 		</form>

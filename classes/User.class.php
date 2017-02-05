@@ -1,7 +1,7 @@
 <?php
 /* User.php *
 
-Coded by flext0r © 2016
+Coded by flext0r © 2016 - 2017
 
 */
 class User
@@ -93,19 +93,18 @@ class User
 				}
 	}
 	
-	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//still needs loads of work ffs
+	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//might be finished but needs to be tested for some time
 	{
-		$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
+		$SQL = $this->db->prepare("SELECT user_id, user_login,user_email FROM users WHERE user_id != :id AND user_login = :login AND user_email = :email");
 		$SQL->bindParam(':login',$username);
 		$SQL->bindParam(':email',$email);
+		$SQL->bindParam(':id',$this->get_Data('user_id'));
 		$SQL->execute();
 		$Row = $SQL->fetch(PDO::FETCH_ASSOC);
-		
 		$Error = [];
-		if(empty($username) OR empty($email))
+		if($username == '')
 		{
 			$username = $this->get_Data('user_login');
-			$email = $this->get_Data('user_email');
 		}
 		if($username == $Row['user_login'])
 		{
@@ -119,23 +118,27 @@ class User
 		{
 			$Error[] = 'Passwords dont match!';
 		}
-		if(filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
+		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		{
 			$Error[] = "Email is invalid!";
 		}
 		if($email == $Row['user_email'])
 		{
-			$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+			$Error[] = 'Email is already taken!';
 		}
 		if(count($Error) == 0)
 		{
 			try {
-				
-				$newpassword = $this->hashpass($newpassword);
+				if($newpassword == '')
+				{
+					$newpassword = $this->get_Data('user_password');
+				}else{
+					$newpassword = $this->hashpass($newpassword);
+				}
 				$SQL = $this->db->prepare("UPDATE users SET user_login = :username, user_password = :password, user_email = :email WHERE user_id = :id");
 				$SQL->bindParam(':username',$username);
 				$SQL->bindParam(':password',$newpassword);
-				$SQL->bindParam(':email',$newemail);
+				$SQL->bindParam(':email',$email);
 				$SQL->bindParam(':id',$this->get_Data('user_id'));
 				$SQL->execute();
 				echo '<center>Your profile has been updated!</center>';
