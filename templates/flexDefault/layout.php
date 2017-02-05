@@ -2,12 +2,11 @@
 /*
 layout.php
 
-Coded by flext0r © 2016
+Coded by flext0r © 2016 - 2017
 
 
 */
 require_once './includes/main.php';
-require_once './includes/pages.php';
 require_once './classes/ti.class.php';
 
 if(isset($_POST['Send']))
@@ -20,6 +19,10 @@ if(isset($_POST['Send']))
 		$ShowUserInfo = $result;
 	}
 	
+}
+if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0)
+{
+	header('Location: maintenance.php');
 }
 
 ?>
@@ -40,6 +43,7 @@ if(isset($_POST['Send']))
 	<div class="wrapper">
 		<div class="left">
 			<a href="index.php" class="button">Strona Glowna</a>
+			<a href="users.php" class="button">Lista Użytkowników</a>
 			<?php
 			if(!$User->is_logged())
 			{
