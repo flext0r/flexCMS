@@ -3,16 +3,21 @@
 require_once 'templates/flexDefault/layout.php';
 
 startblock('title');
-echo 'Strona Glowna';
+echo 'Home';
 endblock();
 
 startblock('thead');
-echo 'Strona Glowna';
+echo 'Home';
 endblock();
 
 
 startblock('content');
+$User->NewestUsers();
 echo '<center><h1>someth1ng</h1></center>';
+
+
+
+
 endblock();
 
 ?>

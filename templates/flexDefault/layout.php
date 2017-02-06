@@ -42,16 +42,16 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 <div class="top">
 	<div class="wrapper">
 		<div class="left">
-			<a href="index.php" class="button">Strona Glowna</a>
-			<a href="users.php" class="button">Lista Użytkowników</a>
+			<a href="index.php" class="button">Home</a>
+			<a href="users.php" class="button">Users</a>
 			<?php
 			if(!$User->is_logged())
 			{
-				echo '<a href="register.php" class="button">Zarejestruj sie</a>';
+				echo '<a href="register.php" class="button">Sign up</a>';
 			}
 			if($User->get_Data('user_level') > 0)
 			{
-				echo '<a href="admin.php" class="button">Panel Administracyjny</a>';
+				echo '<a href="admin.php" class="button">Administration Panel</a>';
 			}
 			?>
 		</div>
@@ -62,10 +62,10 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 					echo '<form method="POST" action="index.php">
 					<input type="text" class="input" name="login" placeholder="Login/E-mail">
 					<input type="password" class="input" name="password" placeholder="Haslo">
-					<input type="submit" class="button" name = "Send" value="Zaloguj sie">
+					<input type="submit" class="button" name = "Send" value="Log in">
 					</form>';
 				}else{
-					echo '<a href="logout.php" class="button">Wyloguj sie</a>';
+					echo '<a href="logout.php" class="button">Log out</a>';
 					echo '<a href="profile.php?global">'.$User->get_Data('user_login').'</a>';
 				}
 				echo $ShowUserInfo;

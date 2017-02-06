@@ -10,11 +10,11 @@ still broken, needs to be fixed asap
 require_once 'templates/flexDefault/layout.php';
 
 startblock('title');
-echo 'Profil';
+echo 'Profile';
 endblock();
 
 startblock('thead');
-echo 'Profil';
+echo 'Profile';
 endblock();
 
 startblock('content');
@@ -51,9 +51,9 @@ if(!$User->is_logged())
 echo'
 	<div class="leftpanel">
 	<br>
-	<a href="profile.php?global" class="leftpanelbutton">Podstawowe informacje</a>
+	<a href="profile.php?global" class="leftpanelbutton">Basic Information</a>
 	<br><br>
-	<a href="profile.php?editprofile" class="leftpanelbutton">Edytuj Profil</a>
+	<a href="profile.php?editprofile" class="leftpanelbutton">Edit Profile</a>
 	</div>';
 if(isset($_GET['editprofile']))
 {
@@ -67,7 +67,7 @@ if(isset($_GET['editprofile']))
 		$result = $User->EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email);
 		if($result == true) 
 		{
-			$DisplayErrors = 'Wystąpiły błędy:<br>'.implode('<br>', $result).'';
+			$DisplayErrors = 'Error:<br>'.implode('<br>', $result).'';
 		}
 	}
 		
@@ -79,15 +79,15 @@ if(isset($_GET['editprofile']))
 		<br><br>
 		<input type="text" class="input2" name="loginM" placeholder="Nazwa uzytkownika" value='.$User->get_Data('user_login').'>
 		<br><br>
-		<input type="password" class="input2" name="passC" placeholder="Obecne Haslo">
+		<input type="password" class="input2" name="passC" placeholder="Current password">
 		<br><br>
-		<input type="password" class="input2" name="passM1" placeholder="Nowe Haslo">
+		<input type="password" class="input2" name="passM1" placeholder="New password">
 		<br><br>
-		<input type="password" class="input2" name="passM2" placeholder="Powtorz haslo">
+		<input type="password" class="input2" name="passM2" placeholder="Repeat password">
 		<br><br>
-		<input type="text" class="input2" name="emailN" placeholder="Adres email" value='.$User->get_Data('user_email').'>
+		<input type="text" class="input2" name="emailN" placeholder="Email" value='.$User->get_Data('user_email').'>
 		<br><br>
-		<input type="submit" class="button" name = "SendEdit" value="Zapisz zmiany">
+		<input type="submit" class="button" name = "SendEdit" value="Save changes">
 		</form>
 		</center>';
 }

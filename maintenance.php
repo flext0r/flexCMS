@@ -27,11 +27,7 @@ if(isset($_POST['Send']))
 {
 	$login = $_POST['login'];
 	$password = $_POST['password'];
-	$result = $User->Login($login,$password);
-	if($result == true)
-	{
-		$ShowUserInfo = $result;
-	}
+	$User->Login($login,$password);
 	
 }
 		echo '

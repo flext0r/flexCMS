@@ -7,11 +7,11 @@ Coded by flext0r © 2016 - 2017
 */
 require_once 'templates/flexDefault/layout.php';
 startblock('title');
-echo 'Panel Administracyjny';
+echo 'Administration Panel';
 endblock();
 
 startblock('thead');
-echo 'Panel Administracyjny';
+echo 'Administration Panel';
 endblock();
 
 startblock('content');
@@ -47,9 +47,9 @@ if(!$User->get_Data('user_level') > 0)
 		echo'
 		<div class="leftpanel">
 		<br>
-		<a href="admin.php?admin=global" class="leftpanelbutton">Podstawowe Ustawienia</a>
+		<a href="admin.php?admin=global" class="leftpanelbutton">Basic Settings</a>
 		<br><br>
-		<a href="admin.php?admin=users" class="leftpanelbutton">Ustawienia Uzytkownikow</a>
+		<a href="admin.php?admin=users" class="leftpanelbutton">Advanced Settings</a>
 		</div>
 			<form method="POST" action="admin.php">
 			<center>
@@ -64,8 +64,8 @@ if(!$User->get_Data('user_level') > 0)
 			
 			Creating new accounts:
 			<select name="register">
-			<option value="0">Enabled</option>
-			<option value="1">Disabled</option>
+			<option value="0" '.($Admin->getMain_Data('register')=='0' ? 'selected="selected"' : '').'>Enabled</option>
+			<option value="1" '.($Admin->getMain_Data('register')=='1' ? 'selected="selected"' : '').'>Disabled</option>
 			</select>
 			
 			

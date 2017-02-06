@@ -164,6 +164,25 @@ class User
 			return $Error;
 		}
 	}
+	public function NewestUsers()
+	{
+		$SQL = $this->db->prepare("SELECT user_id,user_login FROM users ORDER BY user_id DESC LIMIT 5");
+		$SQL->bindParam(':start',$start_from,PDO::PARAM_INT);
+		$SQL->execute();
+		echo'
+		<div class="leftpanel">
+		<br>
+		<div class="leftpanelbutton">Newest Users</div>
+		<br>';
+		while($Row = $SQL->fetch(PDO::FETCH_ASSOC))
+		{
+			echo $Row['user_login'];
+			echo '<hr>';
+ 
+      
+		};
+		echo '</div>';
+	}
 	public function Users()// broken af
 	{
 		$results_per_page = 20;

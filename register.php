@@ -45,15 +45,15 @@ if($User->is_logged())
 		<br><br>
 		<form method="POST" action="register.php">
 		<br>
-		<input type="text" class="input2" name="loginR" placeholder="Nazwa uzytkownika">
+		<input type="text" class="input2" name="loginR" placeholder="Username">
 		<br><br>
-		<input type="password" class="input2" name="passR1" placeholder="Haslo">
+		<input type="password" class="input2" name="passR1" placeholder="Password">
 		<br><br>
-		<input type="password" class="input2" name="passR2" placeholder="Powtorz haslo">
+		<input type="password" class="input2" name="passR2" placeholder="Repeat password">
 		<br><br>
-		<input type="text" class="input2" name="emailR" placeholder="Adres email">
+		<input type="text" class="input2" name="emailR" placeholder="Email">
 		<br><br>
-		<input type="submit" class="button" name = "SendR" value="Utworz konto">
+		<input type="submit" class="button" name = "SendR" value="Sign up">
 		</form>
 		</center>';
 		
