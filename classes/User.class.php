@@ -167,7 +167,6 @@ class User
 	public function NewestUsers()
 	{
 		$SQL = $this->db->prepare("SELECT user_id,user_login FROM users ORDER BY user_id DESC LIMIT 5");
-		$SQL->bindParam(':start',$start_from,PDO::PARAM_INT);
 		$SQL->execute();
 		echo'
 		<div class="leftpanel">
