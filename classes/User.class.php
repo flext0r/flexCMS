@@ -16,30 +16,30 @@ class User
 	
 	public function Login($login,$password)
 	{
-			$Error = '';
-			if(empty($login) OR empty($password))
-			{
-				$Error = 'Type your login and password';
-			}else{
-				try{
-					$password = $this->hashpass($password);
-					$SQL = $this->db->prepare("SELECT * from users WHERE user_login=:login AND user_password=:password");
-					$SQL->bindParam(':login',$login,PDO::PARAM_STR);
-					$SQL->bindParam(':password',$password,PDO::PARAM_STR);
-					$SQL->execute();
-					$Row = $SQL->fetch(PDO::FETCH_ASSOC);
-					if($SQL->rowCount() == 1)
-					{	
-						$_SESSION['user_id'] = $Row['user_id'];
-						header('Location: index.php');
-					}else{
-						$Error = 'Your login or password is wrong!';
-					}
-					}catch(PDOEXCEPTION $e)
-					{
-						echo $e->getMessage();
-					}
-			}
+		$Error = '';
+		if(empty($login) OR empty($password))
+		{
+			$Error = 'Type your login and password';
+		}else{
+			try{
+				$password = $this->hashpass($password);
+				$SQL = $this->db->prepare("SELECT * from users WHERE user_login=:login AND user_password=:password");
+				$SQL->bindParam(':login',$login,PDO::PARAM_STR);
+				$SQL->bindParam(':password',$password,PDO::PARAM_STR);
+				$SQL->execute();
+				$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+				if($SQL->rowCount() == 1)
+				{	
+					$_SESSION['user_id'] = $Row['user_id'];
+					header('Location: index.php');
+				}else{
+					$Error = 'Your login or password is wrong!';
+				}
+				}catch(PDOEXCEPTION $e)
+				{
+					echo $e->getMessage();
+				}
+		}
 		if($Error != ''){ return $Error;}
 	}
 		
@@ -67,38 +67,38 @@ class User
 			{
 				$Error[] = "Email is invalid!";
 			}
-				$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
-				$SQL->bindParam(':login',$login);
-				$SQL->bindParam(':email',$email);
-				$SQL->execute();
-				$Row = $SQL->fetch(PDO::FETCH_ASSOC);
-				if($Row['user_login'] == $login)
-				{
-					$Error[] = "Login <b>".$login."</b> already exist!";
-				}
-				if($Row['user_email'] == $email)
-				{
-					$Error[] = 'Email <b>'.$email.'</b> is already taken!';
-				}
-				if(count($Error) == 0)
-				{
-					try{
-						$password = $this->hashpass($password);
-						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date) VALUES (:login,:password,:email,:date)");
-						$SQL->bindParam(':login',$login,PDO::PARAM_STR);
-						$SQL->bindParam(':password',$password,PDO::PARAM_STR);
-						$SQL->bindParam(':email',$email,PDO::PARAM_STR);
-						$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
-						$SQL->execute();
-						echo '<script>alert("Your account '.$login.' has been created!");</script>';
-						}catch(PDOEXCEPTION $e)
-						{
-							echo $e->getMessage();
-						}
+			$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
+			$SQL->bindParam(':login',$login);
+			$SQL->bindParam(':email',$email);
+			$SQL->execute();
+			$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+			if($Row['user_login'] == $login)
+			{
+				$Error[] = "Login <b>".$login."</b> already exist!";
+			}
+			if($Row['user_email'] == $email)
+			{
+				$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+			}
+			if(count($Error) == 0)
+			{
+				try{
+					$password = $this->hashpass($password);
+					$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date) VALUES (:login,:password,:email,:date)");
+					$SQL->bindParam(':login',$login,PDO::PARAM_STR);
+					$SQL->bindParam(':password',$password,PDO::PARAM_STR);
+					$SQL->bindParam(':email',$email,PDO::PARAM_STR);
+					$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
+					$SQL->execute();
+					echo '<center>Your account <b>'.$login.'</b> has been created!</center>';
+					}catch(PDOEXCEPTION $e)
+					{
+						echo $e->getMessage();
+					}
 				}else{
 					return $Error;
 				}
-	}
+		}
 	
 	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//might be finished but needs to be tested for some time
 	{
@@ -113,13 +113,13 @@ class User
 		{
 			$username = $this->get_Data('user_login');
 		}
-		if(!check_username($login))
+		if(!check_username($username))
 		{
 			$Error[] = 'Username is invalid';
 		}
 		if($username == $Row['user_login'])
 		{
-			$Error[] = "<b>".$username."</b> is already taken";
+			$Error[] = "<b>".$username."</b> is already taken!";
 		}
 		if($this->get_Data('user_password') != $this->hashpass($currentpassword))
 		{
@@ -140,7 +140,6 @@ class User
 		{
 			$Error[] = 'Email is already taken!';
 		}
-		
 		if(count($Error) == 0)
 		{
 			try {
@@ -165,6 +164,41 @@ class User
 			return $Error;
 		}
 	}
+	public function Users()// broken af
+	{
+		$results_per_page = 20;
+		if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
+		$start_from = ($page-1) * $results_per_page;
+		$SQL = $this->db->prepare("SELECT user_id,user_login,user_level FROM users ORDER BY user_id LIMIT 10");
+		$SQL->bindParam(':start',$start_from,PDO::PARAM_INT);
+		$SQL->execute();
+		
+		echo'<table border="1" cellpadding="4">
+		<tr>
+		<td bgcolor="#CCCCCC"><strong>ID</strong></td>
+		<td bgcolor="#CCCCCC"><strong>Name</strong></td><td bgcolor="#CCCCCC"><strong>Level</strong></td></tr>';
+
+		while($Row = $SQL->fetch(PDO::FETCH_ASSOC)) {
+ 
+            echo '<tr>
+            <td>'.$Row['user_id'].'</td>
+            <td>'.$Row['user_login'].'</td>
+            <td>'.$Row['user_level'].'</td>
+            </tr>';
+
+		};
+		$SQL = $this->db->prepare("SELECT COUNT(user_id) AS total FROM users");
+		$SQL->execute();
+		$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+		$total_pages = ceil($Row["total"] / $results_per_page); // calculate total pages with results
+  
+		for ($i=1; $i<=$total_pages; $i++) {  // print links for all pages
+            echo "<a href='users.php?page=".$i."'";
+            if ($i==$page)  echo " class='curPage'";
+            echo ">".$i."</a> "; 
+		}; 
+		
+	}
 	
 	public function get_Data($get)
 	{
@@ -187,21 +221,13 @@ class User
 	public function hashpass($str) {
 		return hash('sha256', $str);
 	}
-
-	public function logout()
-	{
-		session_destroy();
-		$_SESSION['user_id'] = null;
-		header("Location: index.php");
-		
-	}
 	
 	public function is_logged(){
 	return isset($_SESSION['user_id']);}
 	
 	public function UserLvl()
 	{
-		$Level = '';
+		$Level = null;
 		$Lvl = $this->get_Data('user_level');
 		if($Lvl == 0)
 		{

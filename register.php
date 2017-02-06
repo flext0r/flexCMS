@@ -7,15 +7,21 @@ Coded by flext0r © 2016
 require_once 'templates/flexDefault/layout.php';
 
 startblock('title');
-echo 'Rejestracja';
+echo 'Register';
 endblock();
 
 startblock('thead');
-echo 'Rejestracja';
+echo 'Register';
 endblock();
 
 $DisplayErrors = null;
 startblock('content');
+if($Admin->getMain_Data('register') == 1)
+{
+	echo '<center>Creating new accounts is temporarily disabled!</center>';
+	endblock();
+	exit;
+}
 if($User->is_logged())
 {
 	header("Location: index.php");
