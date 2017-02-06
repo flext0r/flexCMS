@@ -42,7 +42,6 @@ if(!$User->get_Data('user_level') > 0)
 				$registerS = '1';
 			break;
 		}
-			echo $register,$registerS;
 			$Admin->AdminUpdate($title,$footer,$tech_reason,$tech_break,$registerS);
 		}
 		echo'
@@ -65,8 +64,8 @@ if(!$User->get_Data('user_level') > 0)
 			
 			Creating new accounts:
 			<select name="register">
-			<option value="0" selected="'.($Admin->getMain_Data('register')=='0' ? 'selected' : '').'>Enabled</option>
-			<option value="1" selected="'.($Admin->getMain_Data('register')=='1' ? 'selected' : '').'>Disabled</option>
+			<option value="0">Enabled</option>
+			<option value="1">Disabled</option>
 			</select>
 			
 			
