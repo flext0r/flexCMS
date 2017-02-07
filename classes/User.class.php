@@ -14,7 +14,7 @@ class User
 	
 	}
 	
-	public function Login($login,$password)
+	public function Login($login,$password) // login.php needs to be created ffs ehhh :)))
 	{
 		$Error = '';
 		if(empty($login) OR empty($password))
@@ -29,9 +29,14 @@ class User
 				$SQL->execute();
 				$Row = $SQL->fetch(PDO::FETCH_ASSOC);
 				if($SQL->rowCount() == 1)
-				{	
-					$_SESSION['user_id'] = $Row['user_id'];
-					header('Location: index.php');
+				{
+					if($Row['verified'] == 0)
+					{
+						$Error = "<center>You're unable to log in because you haven't activated your account yet!<br>Check your inbox!</center>";
+					}else{
+						$_SESSION['user_id'] = $Row['user_id'];
+						header('Location: index.php');
+					}
 				}else{
 					$Error = 'Your login or password is wrong!';
 				}
@@ -44,7 +49,7 @@ class User
 	}
 		
 
-	public function Register($login,$password,$password2,$email)
+	public function Register($login,$password,$password2,$email)// activating account coming up 
 	{
 			$Error = [];
 			if(empty($login) OR empty($password) OR empty($password2) OR empty($email))
@@ -72,25 +77,52 @@ class User
 			$SQL->bindParam(':email',$email);
 			$SQL->execute();
 			$Row = $SQL->fetch(PDO::FETCH_ASSOC);
-			if($Row['user_login'] == $login)
+			
+			$SQL = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :email AND verified = '0'");
+			$SQL->bindParam(':email',$email);
+			$SQL->execute();
+			if($SQL->rowCount() == 1)
 			{
-				$Error[] = "Login <b>".$login."</b> already exist!";
-			}
-			if($Row['user_email'] == $email)
-			{
-				$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+				$Error[] = '<center>Email <b>'.$email.'</b> is already registered in out database but needs to be activated!<br>Activation email has been sent! Check your inbox!</center>';
+
+			}else{
+				if($Row['user_login'] == $login)
+				{
+					$Error[] = "Login <b>".$login."</b> already exist!";
+				}
+				if($Row['user_email'] == $email)
+				{
+					$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+				}
 			}
 			if(count($Error) == 0)
 			{
 				try{
-					$password = $this->hashpass($password);
-					$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date) VALUES (:login,:password,:email,:date)");
-					$SQL->bindParam(':login',$login,PDO::PARAM_STR);
-					$SQL->bindParam(':password',$password,PDO::PARAM_STR);
-					$SQL->bindParam(':email',$email,PDO::PARAM_STR);
-					$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
-					$SQL->execute();
-					echo '<center>Your account <b>'.$login.'</b> has been created!</center>';
+					$htmlStr = "";
+					$htmlStr .= "Hey " . $login . ",<br /><br />";
+					$htmlStr .= "You have to activate your account to be able to use our site! Activate your account be clicking link below!<br /><br /><br />";
+					$htmlStr .= "<a href='{$verificationLink}' target='_blank' style='padding:1em; font-weight:bold; background-color:blue; color:#fff;'>VERIFY ACCOUNT</a><br /><br /><br />";
+					$recipient_email = $email;
+					$headers  = "MIME-Version: 1.0\r\n";
+					$headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+					$headers .= "From: {$name} <{$email_sender}> \n";
+					$body = $htmlStr;
+ 
+					if( mail($recipient_email, $subject, $body, $headers) )
+					{
+						$password = $this->hashpass($password);
+						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date,verified,verification_code) VALUES (:login,:password,:email,:date,:verified,:verification_code)");
+						$SQL->bindParam(':login',$login,PDO::PARAM_STR);
+						$SQL->bindParam(':password',$password,PDO::PARAM_STR);
+						$SQL->bindParam(':email',$email,PDO::PARAM_STR);
+						$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
+						$SQL->bindParam(':verified',0,PDO::PARAM_INT);
+						$SQL->bindParam(':verification_code',$verification_code,PDO::PARAM_STR);
+						$SQL->execute();
+						echo '<center>Your account <b>'.$login.'</b> has been created but before you will be able to log in you have to activate your account!<br>Check your email <b>'.$email.'</b> and activate your account!</center>';
+					}else{
+						echo '<center>An error occurred while sending email!</center>';
+					}
 					}catch(PDOEXCEPTION $e)
 					{
 						echo $e->getMessage();
@@ -100,7 +132,7 @@ class User
 				}
 		}
 	
-	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//might be finished but needs to be tested for some time
+	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//it's kinda working but but error 'password is invalid' neeeds to be fixed
 	{
 		$SQL = $this->db->prepare("SELECT user_id, user_login,user_email FROM users WHERE user_id != :id AND user_login = :login AND user_email = :email");
 		$SQL->bindParam(':login',$username);
@@ -163,6 +195,29 @@ class User
 		}else{
 			return $Error;
 		}
+	}
+	public function Activate()
+	{
+		if($this->is_logged())
+		{
+			header('Location: index.php');
+		}
+		$SQL = $this->db->prepare("SELECT user_id FROM users WHERE verification_code = :code AND verified = 0");
+		$SQL->bindParam(':code',$_GET['code']);
+		$SQL->execute();
+		if($SQL->rowCount() == 1)
+		{
+			$SQL = $this->db->prepare("UPDATE users SET verified = '1' WHERE verification_code = :code");
+			$SQL->bindParam(':code',$_GET['code']);
+			if($SQL->execute())
+			{	
+				echo "Your account has been activated!";
+			}else{
+				echo "We're unable to activate your account!";
+			}
+			}else{
+				header('Location: index.php');
+			}	
 	}
 	public function NewestUsers()
 	{

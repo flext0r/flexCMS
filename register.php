@@ -14,7 +14,7 @@ startblock('thead');
 echo 'Register';
 endblock();
 
-$DisplayErrors = null;
+$ShowErrors = null;
 startblock('content');
 if($Admin->getMain_Data('register') == 1)
 {
@@ -35,13 +35,13 @@ if($User->is_logged())
 			$result = $User->Register($login,$password,$password2,$email);
 			if($result == true) 
 			{
-				$DisplayErrors = 'Wystąpiły błędy:<br>'.implode('<br>', $result).'';
+				$ShowErrors = 'Error:<br>'.implode('<br>', $result).'';
 			}
 	
 	}
 	echo'
 		<center>
-		<b>'.$DisplayErrors.'</b>
+		<b>'.$ShowErrors.'</b>
 		<br><br>
 		<form method="POST" action="register.php">
 		<br>

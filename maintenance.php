@@ -36,9 +36,9 @@ if(isset($_POST['Send']))
 		echo '<center><h1>'.$Admin->getMain_Data('tech_reason').'</h1></center>';
 		echo '<center><form method="POST" action="maintenance.php">
 		<br>
-		<input type="text" style="width:30%;" class="input" name="login" placeholder="Login/E-mail">
+		<input type="text" style="width:30%;" class="input" name="login" placeholder="Login">
 		<br>
-		<input type="password" style="width:30%;" class="input" name="password" placeholder="Haslo">
+		<input type="password" style="width:30%;" class="input" name="password" placeholder="Password">
 		<br>
 		<input type="submit" style="width:10%;" class="button" name = "Send" value="Sign in">
 		</form></center>';

@@ -9,17 +9,6 @@ Coded by flext0r © 2016 - 2017
 require_once './includes/main.php';
 require_once './classes/ti.class.php';
 
-if(isset($_POST['Send']))
-{
-	$login = $_POST['login'];
-	$password = $_POST['password'];
-	$result = $User->Login($login,$password);
-	if($result == true)
-	{
-		$ShowUserInfo = $result;
-	}
-	
-}
 if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0)
 {
 	header('Location: maintenance.php');
@@ -59,7 +48,7 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 			<?php 
 				if(!$User->is_logged())
 				{
-					echo '<form method="POST" action="index.php">
+					echo '<form method="POST" action="login.php">
 					<input type="text" class="input" name="login" placeholder="Login/E-mail">
 					<input type="password" class="input" name="password" placeholder="Haslo">
 					<input type="submit" class="button" name = "Send" value="Log in">
@@ -68,7 +57,6 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 					echo '<a href="logout.php" class="button">Log out</a>';
 					echo '<a href="profile.php?global">'.$User->get_Data('user_login').'</a>';
 				}
-				echo $ShowUserInfo;
 			?>
 			</div>
 	</div>
@@ -77,9 +65,11 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 
 <div class="content">
 	<div class="thead"><?php startblock('thead') ?><?php endblock() ?></div>
+		<?php 
 		
-		<?php startblock('content') ?>
-		<?php endblock() ?>
+		startblock('content');
+		endblock();
+		?>
 		
 		
 <div class="footer"><?php echo $Admin->getMain_Data('footer');?></div>
