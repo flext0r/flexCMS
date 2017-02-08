@@ -16,11 +16,13 @@ class User
 	
 	public function Login($login,$password) // login.php needs to be created ffs ehhh :)))
 	{
-		$Error = '';
+		$Error = null;
 		if(empty($login) OR empty($password))
 		{
 			$Error = 'Type your login and password';
-		}else{
+		}
+		if($Error == '')
+		{
 			try{
 				$password = $this->hashpass($password);
 				$SQL = $this->db->prepare("SELECT * from users WHERE user_login=:login AND user_password=:password");
@@ -44,12 +46,10 @@ class User
 				{
 					echo $e->getMessage();
 				}
-		}
-		if($Error != ''){ return $Error;}
+		}else{return $Error;}
 	}
-		
 
-	public function Register($login,$password,$password2,$email)// activating account coming up 
+	public function Register($login,$password,$password2,$email)
 	{
 			$Error = [];
 			if(empty($login) OR empty($password) OR empty($password2) OR empty($email))
@@ -98,9 +98,14 @@ class User
 			if(count($Error) == 0)
 			{
 				try{
+					$verification_code = md5(uniqid("flexCMSflext0RRRCODE007259",true)); 
+					$verificationLink = "localhost/flexCMS/activate.php?code=" . $verification_code;
+					$name = "flexCMS";
+					$email_sender = "no-reply@flexCMS.com";
+					$subject = "Verification | flexCMS";
 					$htmlStr = "";
 					$htmlStr .= "Hey " . $login . ",<br /><br />";
-					$htmlStr .= "You have to activate your account to be able to use our site! Activate your account be clicking link below!<br /><br /><br />";
+					$htmlStr .= "You have to activate your account to be able to use our site! Activate your account by clicking link below!<br /><br /><br />";
 					$htmlStr .= "<a href='{$verificationLink}' target='_blank' style='padding:1em; font-weight:bold; background-color:blue; color:#fff;'>VERIFY ACCOUNT</a><br /><br /><br />";
 					$recipient_email = $email;
 					$headers  = "MIME-Version: 1.0\r\n";
@@ -108,7 +113,7 @@ class User
 					$headers .= "From: {$name} <{$email_sender}> \n";
 					$body = $htmlStr;
  
-					if( mail($recipient_email, $subject, $body, $headers) )
+					if(mail($recipient_email, $subject, $body, $headers))
 					{
 						$password = $this->hashpass($password);
 						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date,verified,verification_code) VALUES (:login,:password,:email,:date,:verified,:verification_code)");
@@ -196,6 +201,78 @@ class User
 			return $Error;
 		}
 	}
+	public function ResetPassword($email)
+	{
+		$Error = null;
+		$SQL = $this->db->prepare("SELECT user_email FROM users WHERE user_email = :email");
+		$SQL->bindParam(':email',$email);
+		$SQL->execute();
+		if(empty($email))
+		{
+			$Error = "You have to enter your email!";
+		}
+		if($Error == '')
+		{
+			if(!$SQL->rowCount() == 1)
+			{
+				$Error = "Email <b>".$email." doesn't exist in our database!";
+			}else{
+				$resetkey = md5(uniqid("flexCMSflext0RRRCODE007259",true)); 
+				$verificationLink = "localhost/flexCMS/change_password.php?code=" . $resetkey;
+				$name = "flexCMS";
+				$email_sender = "no-reply@flexCMS.com";
+				$subject = "Reset Your Password | flexCMS";
+				$htmlStr = "";
+				$htmlStr .= "Hey " . $email . ",<br /><br />";
+				$htmlStr .= "You have to activate your account to be able to use our site! Reset your password by clicking link below!<br /><br /><br />";
+				$htmlStr .= "<a href='{$verificationLink}' target='_blank' style='padding:1em; font-weight:bold; background-color:blue; color:#fff;'>VERIFY ACCOUNT</a><br /><br /><br />";
+				$recipient_email = $email;
+				$headers  = "MIME-Version: 1.0\r\n";
+				$headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+				$headers .= "From: {$name} <{$email_sender}> \n";
+				$body = $htmlStr;
+				if(mail($recipient_email, $subject, $body, $headers))
+				{
+					$SQL = $this->db->prepare("UPDATE users SET reset_key = :reset_key WHERE user_email = :email");
+					$SQL->bindParam(':reset_key',$resetkey);
+					$SQL->bindParam(':email',$email);
+					$SQL->execute();
+					echo "We've sent you email to reset your password!<br>Check your inbox!";
+				}
+			}
+		}else{return $Error;}
+	}
+	public function NewPassword($email,$newpassword,$confirmpassword)
+	{
+		$Error = null;
+		$resetkey = isset($_GET['code']);
+		if(empty($email) OR empty($newpassword) OR empty($confirmpassword))
+		{
+			$Error = "Forms can't be empty!";
+		}
+		if($Error == '')
+		{
+			$SQL = $this->db->prepare("SELECT user_email,reset_key FROM users WHERE user_email = :email AND reset_key = :reset_key");
+			$SQL->bindParam(':email',$email);
+			$SQL->bindParam(':reset_key',$reset_key);
+			$SQL->execute();
+			if(!$SQL->rowCount() == 1)
+			{
+				$Error = 'Your email or reset key is wrong!';
+			}else{
+				if($newpassword != $confirmpassword)
+				{
+					$Error = "Passwords don't match!";
+				}
+				$SQL = $this->db->prepare("UPDATE users SET user_password = :password, reset_key = '' WHERE user_email = :email");
+				$SQL->bindParam(':password',$newpassword = $this->hashpass($newpassword));
+				$SQL->bindParam(':email',$email);
+				$SQL->execute();
+				echo 'Your password has been changed!';
+			}
+		}else{return $Error;}
+	}
+		
 	public function Activate()
 	{
 		if($this->is_logged())
@@ -221,7 +298,7 @@ class User
 	}
 	public function NewestUsers()
 	{
-		$SQL = $this->db->prepare("SELECT user_id,user_login FROM users ORDER BY user_id DESC LIMIT 5");
+		$SQL = $this->db->prepare("SELECT user_id,user_login FROM users WHERE verified = '1' ORDER BY user_id DESC LIMIT 5");
 		$SQL->execute();
 		echo'
 		<div class="leftpanel">

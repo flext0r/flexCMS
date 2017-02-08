@@ -25,6 +25,11 @@ endblock();
 
 
 startblock('content');
+if($User->is_logged())
+{
+	header('Location: index.php');
+}
+
 echo '
 	<center>
 	'.$ShowErrors.'
@@ -40,8 +45,10 @@ echo '
 	<br>
 	<input type="submit" style="width:10%;" class="button" name = "Send" value="Sign in">
 	</form>
-	<a href="login.php?newpassword">I forgot my password</a>
+	<a href="reset_password.php">I forgot my password</a>
 	</center>';
+
+
 
 
 endblock();

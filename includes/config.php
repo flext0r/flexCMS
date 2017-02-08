@@ -13,15 +13,6 @@ $MYSQL_USER = 'root';
 $ShowUserInfo = null;
 $date = date("Y-m-d H:i:s");
 
-//-----------------------------------------------------------------------------------------------------
-/* activation account */
-$verification_code = md5(uniqid("flexCMSflext0RRRCODE007259",true)); 
-$verificationLink = "localhost/flexCMS/activate.php?code=" . $verification_code;
-$name = "flexCMS";
-$email_sender = "no-reply@flexCMS.com";
-$subject = "Verification | flexCMS";
-//------------------------------------------------------------------------------------------------------
-
 
 /*
 CREATE TABLE `users` (
@@ -33,6 +24,7 @@ CREATE TABLE `users` (
   `user_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `verified` INT(11) NOT NULL,
   `verification_code` varchar(255) COLLATE utf8_bin NOT NULL,
+  `reset_key` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
