@@ -14,7 +14,7 @@ class User
 	
 	}
 	
-	public function Login($login,$password) // login.php needs to be created ffs ehhh :)))
+	public function Login($login,$password)
 	{
 		$Error = null;
 		if(empty($login) OR empty($password))
@@ -99,7 +99,7 @@ class User
 			{
 				try{
 					$verification_code = md5(uniqid("flexCMSflext0RRRCODE007259",true)); 
-					$verificationLink = "localhost/flexCMS/activate.php?code=" . $verification_code;
+					$verificationLink = "".$_SERVER['SERVER_NAME']."/activate.php?code=" . $verification_code;
 					$name = "flexCMS";
 					$email_sender = "no-reply@flexCMS.com";
 					$subject = "Verification | flexCMS";
@@ -116,12 +116,11 @@ class User
 					if(mail($recipient_email, $subject, $body, $headers))
 					{
 						$password = $this->hashpass($password);
-						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date,verified,verification_code) VALUES (:login,:password,:email,:date,:verified,:verification_code)");
+						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date,verified,verification_code) VALUES (:login,:password,:email,:date,verified = '0',:verification_code)");
 						$SQL->bindParam(':login',$login,PDO::PARAM_STR);
 						$SQL->bindParam(':password',$password,PDO::PARAM_STR);
 						$SQL->bindParam(':email',$email,PDO::PARAM_STR);
 						$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
-						$SQL->bindParam(':verified',0,PDO::PARAM_INT);
 						$SQL->bindParam(':verification_code',$verification_code,PDO::PARAM_STR);
 						$SQL->execute();
 						echo '<center>Your account <b>'.$login.'</b> has been created but before you will be able to log in you have to activate your account!<br>Check your email <b>'.$email.'</b> and activate your account!</center>';
@@ -165,9 +164,13 @@ class User
 		if($newpassword != $confirmpassword)
 		{
 			$Error[] = 'Passwords dont match!';
-		}elseif(!check_password($newpassword))
+		}
+		if(!empty($newpassword) OR !empty($confirmpassword))
 		{
-			$Error[] = 'Password is invalid';
+			if(!check_password($newpassword))
+			{
+				$Error[] = 'Password is invalid';
+			}
 		}
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		{
@@ -218,7 +221,7 @@ class User
 				$Error = "Email <b>".$email." doesn't exist in our database!";
 			}else{
 				$resetkey = md5(uniqid("flexCMSflext0RRRCODE007259",true)); 
-				$verificationLink = "localhost/flexCMS/change_password.php?code=" . $resetkey;
+				$verificationLink = "".$_SERVER['SERVER_NAME']."/change_password.php?code=" . $resetkey;
 				$name = "flexCMS";
 				$email_sender = "no-reply@flexCMS.com";
 				$subject = "Reset Your Password | flexCMS";

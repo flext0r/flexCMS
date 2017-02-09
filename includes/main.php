@@ -18,5 +18,4 @@ $Admin = new Admin($connection);
 $Article = new Articles($connection);
 
 
-
 ?>

@@ -10,9 +10,13 @@ $MYSQL_DB = 'project';
 $MYSQL_PASSWORD = '';
 $MYSQL_USER = 'root';
 
+
 $ShowUserInfo = null;
 $date = date("Y-m-d H:i:s");
-
+/*
+test123456
+flexcms
+*/
 
 /*
 CREATE TABLE `users` (
@@ -28,11 +32,15 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `settings` (
+  `title` varchar(255) COLLATE utf8_bin NOT NULL,
+  `footer` varchar(255) COLLATE utf8_bin NOT NULL,
+  `tech_reason` varchar(255) COLLATE utf8_bin NOT NULL,
+  `tech_break` INT(11) NOT NULL,
+  `register` INT(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-*/
 
-
-/*
 CREATE TABLE `articles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,

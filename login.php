@@ -48,9 +48,6 @@ echo '
 	<a href="reset_password.php">I forgot my password</a>
 	</center>';
 
-
-
-
 endblock();
 
 ?>
