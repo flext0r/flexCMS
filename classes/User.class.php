@@ -116,11 +116,10 @@ class User
 					if(mail($recipient_email, $subject, $body, $headers))
 					{
 						$password = $this->hashpass($password);
-						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date,verified,verification_code) VALUES (:login,:password,:email,:date,verified = '0',:verification_code)");
+						$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,verified,verification_code) VALUES (:login,:password,:email,'0',:verification_code)");
 						$SQL->bindParam(':login',$login,PDO::PARAM_STR);
 						$SQL->bindParam(':password',$password,PDO::PARAM_STR);
 						$SQL->bindParam(':email',$email,PDO::PARAM_STR);
-						$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
 						$SQL->bindParam(':verification_code',$verification_code,PDO::PARAM_STR);
 						$SQL->execute();
 						echo '<center>Your account <b>'.$login.'</b> has been created but before you will be able to log in you have to activate your account!<br>Check your email <b>'.$email.'</b> and activate your account!</center>';

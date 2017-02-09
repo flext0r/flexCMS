@@ -1,4 +1,5 @@
 <?php
+echo phpversion();
 require_once 'templates/flexDefault/layout.php';
 
 startblock('title');
@@ -13,7 +14,6 @@ endblock();
 startblock('content');
 $User->NewestUsers();
 echo '<center><h1>someth1ng</h1></center>';
-
 
 endblock();
 

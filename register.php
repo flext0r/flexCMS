@@ -56,9 +56,6 @@ if($User->is_logged())
 		<input type="submit" class="button" name = "SendR" value="Sign up">
 		</form>
 		</center>';
-		
-		
-
 }
 endblock();
 

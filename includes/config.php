@@ -10,7 +10,6 @@ $MYSQL_DB = 'flexCMS12';
 $MYSQL_PASSWORD = '';
 $MYSQL_USER = 'root';
 
-
 $ShowUserInfo = null;
 $date = date("Y-m-d H:i:s");
 /*
