@@ -18,9 +18,9 @@ if(isset($_POST['Send']))
 	$title = $_POST['title'];
 	$footer = $_POST['footer'];
 	$result = $Admin->InstallCMS($login,$password,$confirmpassword,$email,$title,$footer);
-	if($result == true)
+	if($result == true) 
 	{
-		$result = $ShowErrors;
+		$ShowErrors = 'Error:<br>'.implode('<br>', $result).'';
 	}
 }
 

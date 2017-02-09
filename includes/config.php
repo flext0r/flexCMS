@@ -6,7 +6,7 @@ Coded by flext0r © 2016
 */
 
 $MYSQL_HOST = 'localhost';
-$MYSQL_DB = 'project';
+$MYSQL_DB = 'flexCMS12';
 $MYSQL_PASSWORD = '';
 $MYSQL_USER = 'root';
 

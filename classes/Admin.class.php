@@ -39,42 +39,44 @@ class Admin extends User
 		return $SQL->rowCount();
 	}
 
-	public function InstallCMS($login,$password,$confirmpassword,$email,$title,$footer)//broken kurwa
+	public function InstallCMS($login,$password,$confirmpassword,$email,$title,$footer)
 	{
 		$Error = [];
 		if(empty($login) OR empty($password) OR empty($confirmpassword) OR empty($email) OR empty($title) OR empty($footer))
 		{
-			$Error[] = "Form can't be empty!";
-		}
-		if(!check_username($login))
-		{
-			$Error[] = 'Username is invalid';
-		}
-		if($password != $confirmpassword)
-		{
-			$Error[] = "Passwords don't match!";
-		}elseif(!check_password($password))
-		{
-			$Error[] = 'Password is invalid';
-		}
-		if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
-		{
-			$Error[] = "Email is invalid!";
+			$Error[] = "Forms can't be empty!";
+		}else{
+			if(!check_username($login))
+			{
+				$Error[] = 'Username is invalid';
+			}
+			if($password != $confirmpassword)
+			{
+				$Error[] = "Passwords don't match!";
+			}elseif(!check_password($password))
+			{
+				$Error[] = 'Password is invalid';
+			}
+			if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
+			{
+				$Error[] = "Email is invalid!";
+			}
 		}
 		if(count($Error) == 0)
 		{
 			$password = $this->hashpass($password);
-			$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_email,user_date,verified,verification_code) VALUES (:login,:password,:email,:date,verified = '1',verification_code = '')");
+			$SQL = $this->db->prepare("INSERT INTO users (user_login,user_password,user_level,user_email,verified,verification_code,reset_key) VALUES (:login,:password,'2',:email,'1',' ',' ')");
 			$SQL->bindParam(':login',$login,PDO::PARAM_STR);
 			$SQL->bindParam(':password',$password,PDO::PARAM_STR);
 			$SQL->bindParam(':email',$email,PDO::PARAM_STR);
-			$SQL->bindParam(':date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
 			$SQL->execute();
 
-			$SQL = $this->db->prepare("INSERT INTO settings (title,footer,tech_reason,tech_break,register) VALUES (:title,:footer,tech_reason = '',tech_break = '0',register = '0')");
+			$SQL = $this->db->prepare("INSERT INTO settings (title,footer,tech_reason,tech_break,register) VALUES (:title,:footer,' ',' ',' ')");
 			$SQL->bindParam(':title',$title);
 			$SQL->bindParam(':footer',$footer);
 			$SQL->execute();
+			header('Location: index.php');
+			
 		}else{
 			return $Error;
 		}

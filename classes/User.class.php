@@ -136,7 +136,7 @@ class User
 				}
 		}
 	
-	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)//it's kinda working but but error 'password is invalid' neeeds to be fixed
+	public function EditProfile($username,$currentpassword,$newpassword,$confirmpassword,$email)
 	{
 		$SQL = $this->db->prepare("SELECT user_id, user_login,user_email FROM users WHERE user_id != :id AND user_login = :login AND user_email = :email");
 		$SQL->bindParam(':login',$username);
@@ -161,15 +161,16 @@ class User
 		{
 			$Error[] = 'Your password is wrong!';
 		}
-		if($newpassword != $confirmpassword)
-		{
-			$Error[] = 'Passwords dont match!';
-		}
 		if(!empty($newpassword) OR !empty($confirmpassword))
 		{
 			if(!check_password($newpassword))
 			{
 				$Error[] = 'Password is invalid';
+			}
+		}else{
+			if($newpassword != $confirmpassword)
+			{
+				$Error[] = 'Passwords dont match!';
 			}
 		}
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)

@@ -8,10 +8,10 @@ Coded by flext0r © 2016 - 2017
 */
 require_once './includes/main.php';
 require_once './classes/ti.class.php';
-/*if($Admin->is_installed() == 0)
+if($Admin->is_installed() == 0)
 {
 	header('Location: install.php');
-}*/
+}
 if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0)
 {
 	header('Location: maintenance.php');
