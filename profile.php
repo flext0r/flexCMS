@@ -20,30 +20,7 @@ endblock();
 startblock('content');
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $DisplayErrors = null;
-/*
 
-if(is_numeric($id))
-{
-	if(empty($User->get_DataID('user_id',$id)))
-	{
-		echo "<center>Nie znaleziono uzytkownika o ID:<b>".$id."</b>!";
-	}else{
-			echo '
-				<center>
-				<br><br>
-				Nazwa Uzytkownika: <b>'.$User->get_DataID('user_login',$id).'</b>
-				<br>
-				Adres email: <b>'.$User->get_DataID('user_email',$id).'</b>
-				<br>
-				Poziom: <b>'.$User->UserLvl().'</b>
-				<br>
-				Data rejestracji: <b>'.$User->get_DataID('user_date',$id).'</b>
-				</center>
-				<br><br>';
-		}
-	}else{
-		echo "<center>Podane ID nie jest liczba!</center>";
-}*/
 if(!$User->is_logged())
 {
 	header("Location: index.php");
@@ -100,7 +77,7 @@ if(isset($_GET['global']))
 	<br>
 	Adres email: <b>'.$User->get_Data('user_email').'</b>
 	<br>
-	Poziom: <b>'.$User->UserLvl().'</b>
+	Poziom: <b>'.$User->UserLvl($_SESSION['user_id']).'</b>
 	<br>
 	Data rejestracji: <b>'.$User->get_Data('user_date').'</b>
 	</center>

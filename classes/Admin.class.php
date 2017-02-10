@@ -32,6 +32,27 @@ class Admin extends User
 			echo $e->getMessage();
 		}
 	}
+	public function BanUser($user_id,$ban)
+	{
+		if(!$this->get_Data('user_level') > 0)
+		{
+			echo "<center>You're not an admin!</center>";
+		}else{
+			if($this->get_DataID('user_level',$user_id) == '2')
+			{
+				echo "<center>You can't ban Head Admins</center>";
+			}else{
+				if($this->get_Data('user_id') == $this->get_DataID('user_id',$user_id))
+				{
+					echo "<center>You can't ban yourself!</center>";
+				}
+					$SQL = $this->db->prepare("UPDATE users SET banned = :ban WHERE user_id = :user_id");
+					$SQL->bindParam(':ban',$ban);
+					$SQL->bindParam(':user_id',$user_id);
+					$SQL->execute();
+				}
+			}
+		}
 	public function is_installed()
 	{
 		$SQL = $this->db->prepare("SELECT user_id FROM users WHERE user_id = '1'");
@@ -44,7 +65,7 @@ class Admin extends User
 		$Error = [];
 		if(empty($login) OR empty($password) OR empty($confirmpassword) OR empty($email) OR empty($title) OR empty($footer))
 		{
-			$Error[] = "Forms can't be empty!";
+			$Error[] = "Form can't be empty!";
 		}else{
 			if(!check_username($login))
 			{

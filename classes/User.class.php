@@ -55,44 +55,44 @@ class User
 			if(empty($login) OR empty($password) OR empty($password2) OR empty($email))
 			{
 				$Error[] = "Form can't be empty!";
-				
-			}
-			if(!check_username($login))
-			{
-				$Error[] = 'Username is invalid';
-			}
-			if($password != $password2)
-			{
-				$Error[] = "Passwords don't match!";
-			}elseif(!check_password($password))
-			{
-				$Error[] = 'Password is invalid';
-			}
-			if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
-			{
-				$Error[] = "Email is invalid!";
-			}
-			$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
-			$SQL->bindParam(':login',$login);
-			$SQL->bindParam(':email',$email);
-			$SQL->execute();
-			$Row = $SQL->fetch(PDO::FETCH_ASSOC);
-			
-			$SQL = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :email AND verified = '0'");
-			$SQL->bindParam(':email',$email);
-			$SQL->execute();
-			if($SQL->rowCount() == 1)
-			{
-				$Error[] = '<center>Email <b>'.$email.'</b> is already registered in out database but needs to be activated!<br>Activation email has been sent! Check your inbox!</center>';
-
 			}else{
-				if($Row['user_login'] == $login)
+				if(!check_username($login))
 				{
-					$Error[] = "Login <b>".$login."</b> already exist!";
+					$Error[] = 'Username is invalid';
 				}
-				if($Row['user_email'] == $email)
+				if($password != $password2)
 				{
-					$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+					$Error[] = "Passwords don't match!";
+				}elseif(!check_password($password))
+				{
+					$Error[] = 'Password is invalid';
+				}
+				if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) 
+				{
+					$Error[] = "Email is invalid!";
+				}
+			
+				$SQL = $this->db->prepare("SELECT user_login,user_email FROM users WHERE user_login = :login OR user_email = :email LIMIT 1");
+				$SQL->bindParam(':login',$login);
+				$SQL->bindParam(':email',$email);
+				$SQL->execute();
+				$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+			
+				$SQL = $this->db->prepare("SELECT user_id FROM users WHERE user_email = :email AND verified = '0'");
+				$SQL->bindParam(':email',$email);
+				$SQL->execute();
+				if($SQL->rowCount() == 1)
+				{
+					$Error[] = '<center>Email <b>'.$email.'</b> is already registered in out database but needs to be activated!<br>Activation email has been sent! Check your inbox!</center>';
+				}else{
+					if($Row['user_login'] == $login)
+					{
+						$Error[] = "Login <b>".$login."</b> already exist!";
+					}
+					if($Row['user_email'] == $email)
+					{
+						$Error[] = 'Email <b>'.$email.'</b> is already taken!';
+					}
 				}
 			}
 			if(count($Error) == 0)
@@ -251,7 +251,7 @@ class User
 		$resetkey = isset($_GET['code']);
 		if(empty($email) OR empty($newpassword) OR empty($confirmpassword))
 		{
-			$Error = "Forms can't be empty!";
+			$Error = "Form can't be empty!";
 		}
 		if($Error == '')
 		{
@@ -299,6 +299,19 @@ class User
 				header('Location: index.php');
 			}	
 	}
+	public function FindUser($data)//broken kurwa
+	{
+		$SQL = $this->db->prepare("SELECT user_id FROM users WHERE user_login = :data OR user_email = :data");
+		$SQL->bindParam(':data',$data);
+		$SQL->execute();
+		$Row = $SQL->fetch(PDO::FETCH_ASSOC);
+		if($SQL->rowCount() == 1)
+		{
+			return $Row['user_id'];
+		}
+	}
+			
+		
 	public function NewestUsers()
 	{
 		$SQL = $this->db->prepare("SELECT user_id,user_login FROM users WHERE verified = '1' ORDER BY user_id DESC LIMIT 5");
@@ -312,8 +325,6 @@ class User
 		{
 			echo $Row['user_login'];
 			echo '<hr>';
- 
-      
 		};
 		echo '</div>';
 	}
@@ -378,19 +389,19 @@ class User
 	public function is_logged(){
 	return isset($_SESSION['user_id']);}
 	
-	public function UserLvl()
+	public function UserLvl($id)
 	{
 		$Level = null;
-		$Lvl = $this->get_Data('user_level');
+		$Lvl = $this->get_DataID('user_level',$id);
 		if($Lvl == 0)
 		{
-			$Level = 'Uzytkownik';
+			$Level = 'User';
 		}elseif($Lvl == 1)
 		{
-			$Level = 'Administrator';
+			$Level = 'Admin';
 		}elseif($Lvl == 2)
 		{
-			$Level = 'Head Administrator';
+			$Level = 'Head Admin';
 		}
 		return $Level;
 	}

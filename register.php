@@ -45,12 +45,20 @@ if($User->is_logged())
 		<br><br>
 		<form method="POST" action="register.php">
 		<br>
+		Username:
+		<br>
 		<input type="text" class="input2" name="loginR" placeholder="Username">
 		<br><br>
+		Password:
+		<br>
 		<input type="password" class="input2" name="passR1" placeholder="Password">
 		<br><br>
-		<input type="password" class="input2" name="passR2" placeholder="Repeat password">
+		Confirm Password:
+		<br>
+		<input type="password" class="input2" name="passR2" placeholder="Confirm password">
 		<br><br>
+		Email:
+		<br>
 		<input type="text" class="input2" name="emailR" placeholder="Email">
 		<br><br>
 		<input type="submit" class="button" name = "SendR" value="Sign up">

@@ -23,6 +23,7 @@ try
 		`verified` INT(11) NOT NULL,
 		`verification_code` varchar(255) COLLATE utf8_bin NOT NULL,
 		`reset_key` varchar(255) COLLATE utf8_bin NOT NULL,
+		`banned` INT(11) NOT NULL,
 		PRIMARY KEY (`user_id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

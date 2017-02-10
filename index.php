@@ -1,5 +1,4 @@
 <?php
-echo phpversion();
 require_once 'templates/flexDefault/layout.php';
 
 startblock('title');

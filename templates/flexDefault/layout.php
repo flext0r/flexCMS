@@ -16,6 +16,10 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 {
 	header('Location: maintenance.php');
 }
+if($User->is_logged() AND $User->get_Data('banned') == '1')
+{
+	header('Location: logout.php');
+}
 
 
 ?>
@@ -37,6 +41,7 @@ if($Admin->getMain_Data('tech_break') == 1 && $User->get_Data('user_level') == 0
 		<div class="left">
 			<a href="index.php" class="button">Home</a>
 			<a href="users.php" class="button">Users</a>
+			<a href="finduser.php" class="button">Find a User</a>
 			<?php
 			if(!$User->is_logged())
 			{
