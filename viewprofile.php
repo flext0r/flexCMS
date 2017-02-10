@@ -1,10 +1,9 @@
 <?php
 /*
-Layout.php
+viewprofile.php
 
-Coded by flext0r © 2016
+Coded by flext0r © 2016-2017
 
-still broken, needs to be fixed asap
 */
 
 require_once 'templates/flexDefault/layout.php';
