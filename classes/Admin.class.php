@@ -34,25 +34,31 @@ class Admin extends User
 	}
 	public function BanUser($user_id,$ban)
 	{
+		$Error = null;
 		if(!$this->get_Data('user_level') > 0)
 		{
-			echo "<center>You're not an admin!</center>";
-		}else{
-			if($this->get_DataID('user_level',$user_id) == '2')
-			{
-				echo "<center>You can't ban Head Admins</center>";
-			}else{
-				if($this->get_Data('user_id') == $this->get_DataID('user_id',$user_id))
-				{
-					echo "<center>You can't ban yourself!</center>";
-				}
-					$SQL = $this->db->prepare("UPDATE users SET banned = :ban WHERE user_id = :user_id");
-					$SQL->bindParam(':ban',$ban);
-					$SQL->bindParam(':user_id',$user_id);
-					$SQL->execute();
-				}
-			}
+			$Error = "<center>You're not an admin!</center>";
 		}
+		if($this->get_DataID('user_level',$user_id) == '2')
+		{
+			$Error = "<center>You can't ban Head Admins</center>";
+		}
+		if($this->get_DataID('user_level',$user_id) == '1' AND $this->get_Data('user_level') == '1')
+		{
+			$Error = "<center>You can't ban other admins!</center>";
+		}
+		if($this->get_Data('user_id') == $this->get_DataID('user_id',$user_id))
+		{
+			$Error = "<center>You can't ban yourself!</center>";
+		}
+		if($Error == '')
+		{
+			$SQL = $this->db->prepare("UPDATE users SET banned = :ban WHERE user_id = :user_id");
+			$SQL->bindParam(':ban',$ban);
+			$SQL->bindParam(':user_id',$user_id);
+			$SQL->execute();
+		}else{return $Error;}
+	}
 	public function is_installed()
 	{
 		$SQL = $this->db->prepare("SELECT user_id FROM users WHERE user_id = '1'");

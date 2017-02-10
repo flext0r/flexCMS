@@ -27,7 +27,7 @@ endblock();
 
 startblock('content');
 echo '
-	<form method="POST" action="reset_password.php">
+	<form method="POST">
 	<center>
 	'.$ShowError.'
 	<br><br>

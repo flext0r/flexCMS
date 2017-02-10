@@ -43,7 +43,7 @@ if($User->is_logged())
 		<center>
 		<b>'.$ShowErrors.'</b>
 		<br><br>
-		<form method="POST" action="register.php">
+		<form method="POST">
 		<br>
 		Username:
 		<br>

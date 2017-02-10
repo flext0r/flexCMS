@@ -18,13 +18,15 @@ endblock();
 
 startblock('content');
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$result = null;
+$ShowError = null;
 if(isset($_POST['Ban']))
 {
 	if($User->get_DataID('banned',$id) == 0)
 	{
-		$Admin->BanUser($id,1);
+		$result = $Admin->BanUser($id,1);
 	}else{
-		$Admin->BanUser($id,0);
+		$result = $Admin->BanUser($id,0);
 	}
 }
 
@@ -36,6 +38,7 @@ if(is_numeric($id))
 	}else{
 		echo '
 			<center>
+			'.$result.'
 			<br><br>
 			Username: <b>'.$User->get_DataID('user_login',$id).'</b>
 			<br>

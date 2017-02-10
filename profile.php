@@ -50,7 +50,7 @@ if(isset($_GET['editprofile']))
 		
 		
 	echo '
-		<form method="POST" action="profile.php?editprofile">
+		<form method="POST">
 		<center>
 		<b>'.$DisplayErrors.'</b>
 		<br><br>

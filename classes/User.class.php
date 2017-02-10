@@ -11,7 +11,6 @@ class User
 	public function __construct($connection)
 	{
 		$this->db = $connection;
-	
 	}
 	
 	public function Login($login,$password)

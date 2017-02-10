@@ -51,7 +51,7 @@ if(!$User->get_Data('user_level') > 0)
 		<br><br>
 		<a href="admin.php?admin=users" class="leftpanelbutton">Advanced Settings</a>
 		</div>
-			<form method="POST" action="admin.php">
+			<form method="POST">
 			<center>
 			<br>
 			Title<br>
